@@ -61,6 +61,7 @@ public class Student extends PersistentObject{
         vals.put("CWID", mCWID);
         db.insert("Student", null, vals);
         for(int i=0; i<mCourses.size(); i++){
+            mCourses.get(i).setCWID(mCWID);
             mCourses.get(i).insert(db);
         }
     }
@@ -72,13 +73,14 @@ public class Student extends PersistentObject{
         mCWID = c.getInt(c.getColumnIndex("CWID"));
 
         mCourses = new ArrayList<>();
-        Cursor cursor = db.query("Course", null,
-                "Student=?", new String[]{new Integer(mCWID).toString()},
+        Cursor cursor = db.query("Courses", null,
+                "CWID=?", new String[]{new Integer(mCWID).toString()},
                 null, null, null);
         if(cursor.getCount() > 0){
             while(cursor.moveToNext()){
                 CourseEnrollment cObj = new CourseEnrollment();
                 cObj.initFrom(db, cursor);
+                mCourses.add(cObj);
             }
         }
     }
@@ -86,6 +88,7 @@ public class Student extends PersistentObject{
 
     @Override
     public void createTable(SQLiteDatabase db) {
+
         db.execSQL("CREATE TABLE IF NOT EXISTS Student (FirstName Text, LastName Text, CWID INTEGER)");
     }
 }

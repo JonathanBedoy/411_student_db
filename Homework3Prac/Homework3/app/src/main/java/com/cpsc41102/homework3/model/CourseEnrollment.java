@@ -44,22 +44,23 @@ public class CourseEnrollment extends PersistentObject{
     @Override
     public void insert(SQLiteDatabase db) {
         ContentValues vals = new ContentValues();
-        vals.put("CourseID", mCourseID);
-        vals.put("Grade", mGrade);
-        vals.put("Student", mCWID);
-        db.insert("Course", null, vals);
+        vals.put("CourseName", mCourseID);
+        vals.put("CourseGrade", mGrade);
+        vals.put("CWID", mCWID);
+        db.insert("Courses", null, vals);
     }
 
     @Override
     public void createTable(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS Course (CourseID Text, Grade Text, Student INTEGER)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS Courses (CourseName Text, CourseGrade Text, CWID Integer)");
     }
 
     @Override
     public void initFrom(SQLiteDatabase db, Cursor c) {
-        mCourseID = c.getString(c.getColumnIndex("CourseID"));
-        mGrade = c.getString(c.getColumnIndex("Grade"));
-        mCWID = c.getInt(c.getColumnIndex("Student"));
+        mCourseID = c.getString(c.getColumnIndex("CourseName"));
+        mGrade = c.getString(c.getColumnIndex("CourseGrade"));
+        mCWID = c.getInt(c.getColumnIndex("CWID"));
     }
 
 

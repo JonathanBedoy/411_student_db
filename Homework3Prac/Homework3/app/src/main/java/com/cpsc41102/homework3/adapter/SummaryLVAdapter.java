@@ -2,14 +2,17 @@ package com.cpsc41102.homework3.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cpsc41102.homework3.R;
+import com.cpsc41102.homework3.StudentDetailActivity;
 import com.cpsc41102.homework3.model.Student;
 import com.cpsc41102.homework3.model.StudentDB;
 
@@ -21,6 +24,7 @@ public class SummaryLVAdapter extends BaseAdapter {
     StudentDB mStudentDB;
     ArrayList<Student> mStudents;
 
+
     public SummaryLVAdapter(Context context){
         mStudentDB = new StudentDB(context);
         mStudentDB.retrieveStudentObjects();
@@ -29,6 +33,9 @@ public class SummaryLVAdapter extends BaseAdapter {
 //        }
     }
 
+    public void refreshStudents() {
+        mStudentDB.retrieveStudentObjects();
+    }
     @Override
     public int getCount() {
         return mStudentDB.getStudents().size();
@@ -60,8 +67,23 @@ public class SummaryLVAdapter extends BaseAdapter {
         firstNameView.setText(s.getFirstName());
         Log.d("SummaryLVAdapter", "getView: " + s.getFirstName());
         TextView lastNameView = row_view.findViewById(R.id.last_name);
-        lastNameView.setText(s.getLastName());
+        lastNameView.setText(" "+s.getLastName());
+        row_view.setTag(new Integer(i));
+        row_view.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //
+                        Toast.makeText(view.getContext(), "View Object was touched", Toast.LENGTH_SHORT).show();
 
+
+                        // Page Navigation
+                        Intent intent = new Intent(view.getContext(), StudentDetailActivity.class);
+                        intent.putExtra("PersonIndex", ((Integer) view.getTag()).intValue());
+                        view.getContext().startActivity(intent);
+                    }
+                }
+        );
         return row_view;
     }
 }

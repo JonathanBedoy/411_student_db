@@ -31,6 +31,8 @@ public class StudentDB {
             while(cursor.moveToNext()){
                 Student sObj = new Student();
                 sObj.initFrom(mSQLiteDatabase, cursor);
+                ArrayList<CourseEnrollment> courses = new ArrayList<>();
+
                 mStudents.add(sObj);
             }
         }
